@@ -1,11 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
+
 
 FILE *conversaoInvert(FILE *caminho, char diretorio[]);
 //FILE *conversaoUToD(FILE *caminho);
 //FILE *conversaoDToU(FILE *caminho);
 //FILE *conversaoCript(FILE *caminho);
+char somaUm(char caractere);
 char *ext(char novoDiretorio[]); //Função que tira a extensão de um arquivo
 
 int main(int argc, char *argv[]) {
@@ -60,7 +63,7 @@ int main(int argc, char *argv[]) {
 
 FILE *conversaoInvert(FILE *caminho, char diretorio[]) {
 
-	char caractere;
+	char ch;
 	char novoDiretorio[strlen(diretorio)+2]; //String do novo arquivo que será criado
 	strcpy(novoDiretorio, diretorio);
 	FILE *novoArquivo; //Arquivo em si que será criado
@@ -73,15 +76,51 @@ FILE *conversaoInvert(FILE *caminho, char diretorio[]) {
 
 	novoArquivo = fopen(novoDiretorio, "w+");
 
+	while(ch != EOF) {
+		ch = fgetc(caminho);
+		fputc(somaUm(ch), novoArquivo);
+	}
+
 	if(x != NULL) {
 		printf("Novo diretório: %s\n", novoDiretorio);
 	} else {
 		strcat(novoDiretorio, ".inv");
 	}
 
-
 	return novoArquivo;
 }
+
+char somaUm(char caractere) {
+
+	int numero = (int) caractere;
+	int arrayBinario[10];
+	int arrayReverso[10];
+	int i = 0;
+  char reverso;
+	float numReverso = 0;
+
+	for(i=0;numero>0;i++) {
+	arrayBinario[i]=numero%2;
+	numero=numero/2;
+	}
+
+	for(i=0;i<(sizeof(arrayBinario) / sizeof(int));i++) {
+		if(arrayBinario[i] == 0) {
+			arrayReverso[i] = 1;
+		} else {
+			arrayReverso[i] = 0;
+		}
+	}
+
+	for(i=(sizeof(arrayBinario) / sizeof(int))-1;i>=0;i--) {
+		numReverso += arrayReverso[i] * pow(2, i);
+	}
+
+	reverso = (char) numReverso;
+
+	return reverso;
+}
+
 
 char *ext(char novoDiretorio[]) {
 int i;
