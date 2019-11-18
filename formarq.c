@@ -9,7 +9,8 @@ FILE *conversaoInvert(FILE *caminho, char diretorio[]);
 //FILE *conversaoDToU(FILE *caminho);
 //FILE *conversaoCript(FILE *caminho);
 char somaUm(char caractere);
-char *ext(char novoDiretorio[]); //Função que tira a extensão de um arquivo
+char *retiraExtensao(char novoDiretorio[]); //Função que tira a extensão de um arquivo
+char *pegaExtensao(char *diretorio);
 
 int main(int argc, char *argv[]) {
 
@@ -67,12 +68,20 @@ FILE *conversaoInvert(FILE *caminho, char diretorio[]) {
 	char novoDiretorio[strlen(diretorio)+2]; //String do novo arquivo que será criado
 	strcpy(novoDiretorio, diretorio);
 	FILE *novoArquivo; //Arquivo em si que será criado
-	char *x;
+	char *x, *extensao;
 	int i;
 
-	x = ext(novoDiretorio); //Tira a extensão do arquivo
+	extensao = pegaExtensao(diretorio);
+	x = retiraExtensao(novoDiretorio); //Tira a extensão do arquivo
 	strcpy(novoDiretorio, x);
-	strcat(novoDiretorio, ".inv");
+	printf("%s\n", extensao);
+
+	int resultado = strcmp(extensao, ".inv"); //Vê se o extensão é .inv
+	if(resultado == 0) {
+		strcat(novoDiretorio, ".dnv");
+	} else {
+		strcat(novoDiretorio, ".inv");
+	}
 
 	novoArquivo = fopen(novoDiretorio, "w+");
 
@@ -93,18 +102,26 @@ FILE *conversaoInvert(FILE *caminho, char diretorio[]) {
 char somaUm(char caractere) {
 
 	int numero = (int) caractere;
-	int arrayBinario[10];
-	int arrayReverso[10];
+	int arrayBinario[7] = {0};
+	int arrayReverso[7]	 = {1};
 	int i = 0;
   char reverso;
 	float numReverso = 0;
 
-	for(i=0;numero>0;i++) {
+	printf("Caractere: %c\n", caractere);
+	printf("Número em decimal: %d\n", numero);
+	for(i=0;numero>0;i++) { //Gera o binário do número
 	arrayBinario[i]=numero%2;
 	numero=numero/2;
 	}
+	int tamanhoBinario = i;
+	printf("Número em binário: ");
+	for(i=6;i>=0; i--) {
+		printf("%d", arrayBinario[i]);
+	}
+	printf("\n");
 
-	for(i=0;i<(sizeof(arrayBinario) / sizeof(int));i++) {
+	for(i=0;i<7;i++) { //Soma um no binário
 		if(arrayBinario[i] == 0) {
 			arrayReverso[i] = 1;
 		} else {
@@ -112,26 +129,51 @@ char somaUm(char caractere) {
 		}
 	}
 
-	for(i=(sizeof(arrayBinario) / sizeof(int))-1;i>=0;i--) {
-		numReverso += arrayReverso[i] * pow(2, i);
+	printf("Número binário reverso: ");
+	for(i=6;i>=0; i--) {
+		printf("%d", arrayReverso[i]);
 	}
+	printf("\n");
 
+	for(i=0;i<7;i++) {
+		numReverso += (arrayReverso[i] * pow(2, i));
+	}
+	printf("Número decimal reverso: %d\n", (int) numReverso);
 	reverso = (char) numReverso;
 
 	return reverso;
 }
 
 
-char *ext(char novoDiretorio[]) {
-int i;
-char *x;
-for(i = strlen(novoDiretorio)-1; i && novoDiretorio[i] != "."; i--) { //Loop desde o último caractere até o primeiro
-	if(novoDiretorio[i] == '.') { //Caso ele ache um ponto
-		novoDiretorio[i] = '\0';  //Corta a string
-	} else {
-		x = novoDiretorio;
+char *retiraExtensao(char novoDiretorio[]) {
+
+	int i;
+	char *x;
+
+	for(i = strlen(novoDiretorio)-1; i && novoDiretorio[i] != "."; i--) { //Loop desde o último caractere até o primeiro
+		if(novoDiretorio[i] == '.') { //Caso ele ache um ponto
+			novoDiretorio[i] = '\0';  //Corta a string
+		} else {
+			x = novoDiretorio;
+		}
 	}
+
+	return novoDiretorio;
 }
 
-return novoDiretorio;
+char *pegaExtensao(char *diretorio) {
+
+	int i;
+	char *extensao;
+
+	for(i=strlen(diretorio)-1; i>0; i--){ //Verifica se tem um ponto e atribui a extensão na variável extensao
+		if(diretorio[i] == '.') {
+			extensao = diretorio + i;
+			break;
+		} else {
+			extensao = NULL;
+		}
+	}
+
+return extensao;
 }
