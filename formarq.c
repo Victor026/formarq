@@ -5,7 +5,7 @@
 
 
 FILE *conversaoInvert(FILE *caminho, char diretorio[]);
-//FILE *conversaoUToD(FILE *caminho);
+FILE *conversaoUToD(FILE *caminho, char diretorio[]);
 //FILE *conversaoDToU(FILE *caminho);
 //FILE *conversaoCript(FILE *caminho);
 char somaUm(char caractere);
@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
 	FILE *path;
 	char* comando;
 
-	path = fopen(argv[1], "r+"); //Atribui o caminho do arquivo inserido à variavel path
+	path = fopen(argv[1], "r+b"); //Atribui o caminho do arquivo inserido à variavel path
 	comando = argv[2]; //Atribui o segundo argumento ao comando
 
 	if(path == NULL) {
@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
 
 			case 'U':
 				printf("Conversão U to D\n");
-				//conversaoUToD(path);
+				conversaoUToD(path, argv[1]);
 			break;
 
 			case 'D':
@@ -61,6 +61,46 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 
+FILE *conversaoUToD(FILE *caminho, char diretorio[]) {
+
+	char ch;
+	char novoDiretorio[strlen(diretorio)+2]; //String do novo arquivo que será criado
+	strcpy(novoDiretorio, diretorio);
+	FILE *novoArquivo; //Arquivo em si que será criado
+	char *x, *extensao;
+	int i;
+
+	extensao = pegaExtensao(diretorio);
+	x = retiraExtensao(novoDiretorio); //Tira a extensão do arquivo
+	strcpy(novoDiretorio, x);
+	printf("%s\n", extensao);
+
+	int resultado = strcmp(extensao, ".unx"); //Vê se o extensão é .unx
+	if(resultado == 0) {
+		strcat(novoDiretorio, ".dos");
+	} else {
+		printf("Formato de arquivo inválido! (Insira um arquivo .unx)\n");
+		exit(0);
+	}
+
+	novoArquivo = fopen(novoDiretorio, "w+");
+
+	while(ch != EOF) {
+		ch = fgetc(caminho);
+		printf("%c", ch);
+		if(ch == '\n') {
+			printf("\nAchei uma quebra de linha!\n" );
+			ch = '\r';
+			fputc(ch, novoArquivo);
+			ch = '\n';
+			fputc(ch, novoArquivo);
+		} else {
+			fputc(ch, novoArquivo);
+		}
+	}
+
+	return novoArquivo;
+}
 
 FILE *conversaoInvert(FILE *caminho, char diretorio[]) {
 
@@ -143,7 +183,6 @@ char somaUm(char caractere) {
 
 	return reverso;
 }
-
 
 char *retiraExtensao(char novoDiretorio[]) {
 
