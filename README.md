@@ -1,41 +1,22 @@
-** -------------- BEM VINDO AO PROGRAMA FORMARQ -------------- **
+```
+#Welcome to Formarq!
+```
 
-** PARA QUE SERVE **
+###What is it?
+Formarq is developed to encrypt files.
 
-O Formarq foi desenvolvido com propósitos múltiplos:
+###How to use it?
+The user should input the file path that is going to be encrypted and the key, both via terminal.
 
-CRIPTOGRAFIA
-Formarq é capaz de criptografar arquivos usando criptografia INVERT ou CRIPT.
+###How does it work?
+The program makes a "exclusive or" between every word of the file and the key generating a new file with the same name as the old one but with the extension .crp
+If the file is already encrypted (it has .crp as extension) it will generate a .drp file with the content of the original file.
+**Note that the user has to input the same key in the encrypted file in order to obtain the desirable result.
 
-CONVERSÃO DE ARQUIVOS TEXTO ENTRE UNIX E DOS
-Também é possível converter arquivos com quebra de linha CR (sistema UNIX) para LF/CR (sistema DOS) e vice-versa.
-
-** COMO FUNCIONA **
-
-CRIPTOGRAFIA INVERT
-Esta criptografia usa o sistema de "complemento de um" para criptografar o arquivo.
-Após a conversão será gerado um arquivo com o mesmo nome do original porém com extensão .inv e com o conteúdo criptografado.
-Quando o arquivo com extensão .inv for criptografado novamente será gerado um arquivo .dnv com o conteúdo do arquivo original.
-
-CRIPTOGRAFIA CRIPT
-Já esta criptografia usa o sistema de "ou exclusivo" entre o arquivo e um chave que será passada pelo usuário.
-Após a conversão será gerado um arquivo com o mesmo nome do original porém com extensão .crp e com o conteúdo criptografado.
-Quando o arquivo com extensão .crp for criptografado novamente será gerado um arquivo .drp com o conteúdo do arquivo original.
-
-CONVERSÃO UNIX TO DOS
-Esta conversão gerará um arquivo .dos com o sistema DOS de quebra de linha (LF/CR).
-Quando o arquivo com extensão .dos é convertido novamente, será gerado um arquivo com extensão .unx que voltará a ter o sistema UNIX de qubra de linha (CR).
-
-** COMO UTILIZAR **
-
-O programa exige alguns argumentos que serão passados no terminal, sendo eles:
-Primeiro argumento: Script do formarq. (./formarq)
-Segundo argumento: Caminho do arquivo a ser modificado. (Ex.: ~/Documentos/teste.txt)
-Terceiro argumento: Comando a ser executado. (C para CRIPT, U para UNIX to DOS, I para INVERT).
-Quarto argumento: Somente usado na conversão CRIPT, será colocado a chave para a conversão.
-
-Exemplos:
-./formarq ~/Documentos/teste.txt I fará a criptografia INVERT no arquivo teste.txt.
-
-./formarq ~/Documentos/teste.txt C MORANGO fará a criptografia CRIPT no arquivo teste.txt usando a chave MORANGO.
-
+###Usage example
+Compile the formarq.c file and open the terminal where the executable file is located and then input:
+./formarq file-that-is-going-to-be-encrypted key (for unix-like operating systems)
+```
+Example: ./formarq ~/Documents/test.txt house
+```
+The above example encrypts the test.txt file using the key "house".
